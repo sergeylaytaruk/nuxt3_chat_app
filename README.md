@@ -1,2 +1,2 @@
-# nuxt3_chat_app
+# nuxt 3 chat app
 chat application
