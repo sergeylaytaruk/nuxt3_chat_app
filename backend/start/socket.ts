@@ -10,7 +10,6 @@ Ws.boot()
 
 console.log("SOCKET IO START");
 let connections = {};
-const clients = new Map();
 Ws.io.on('connection', (socket) => {
 // ------------------
   connections[socket.id] = socket
@@ -19,37 +18,22 @@ Ws.io.on('connection', (socket) => {
 
   socket.on('close', () => {
     delete connections[socket.id]
-    //delete socket.id
   });
 
-  console.log("WEBSOCKET CONNECTED", socket.id);
-  socket.emit('news', { hello: 'world123' });
-  Ws.io.of('/room').on('connection', function (socket) {
-    socket.on('hello', (data) => {
-      console.log("NS ROOM EVENT HELLO", data);
-      socket.emit("resp", "YOU ENTERED");
-    });
-    console.log(socket.id)
-    socket.emit('entered - ', socket.id);
+  socket.on('signin', (data) => { //user entered
+    Ws.io.in(socket.id).socketsJoin(`room-${data.room}`);
+    Ws.addMember(data);
   });
-
-  socket.on('my-event', (data) => {
-    console.log("websocket data=", data);
+  socket.on('exit', (data) => { //user exited
+    data.socketId = socket.id;
+    Ws.exit(data);
+    Ws.removeMember(data);
+    let msg = `${data.name} has left the chat.`;
+    Ws.sendMessage({room: data.room, name: data.name, msg: msg });
   });
-  socket.on('hello', (data) => {
-    console.log("NS GLOBAL EVENT HELLO", data);
+  socket.on('new-msg', (data) => { //new message
+    data.socketId = socket.id;
+    Ws.sendMessage(data);
   });
 });
 Ws.io.listen(3002);
-
-// ----------------------------
-
-console.log("WEBSOCKET START");
-Ws.wss.on('connection', function connection(ws) {
-  console.log("WEBSOCKET CONNECTED");
-  ws.on('error', console.error);
-  ws.on('my-event', function message(data) {
-    console.log('received: ', data);
-  });
-  ws.send('something message send');
-});

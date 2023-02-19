@@ -6,7 +6,8 @@ class Ws {
   public io: Server
   private booted = false
 
-  public wss
+  public wss;
+  private members = {};
 
   public boot() {
     /**
@@ -24,8 +25,45 @@ class Ws {
         origin: '*'
       }
     });
+  }
 
-    this.wss = new WebSocketServer({ port: 3001 });
+  public addMember(data: { name: string; room: string; }) {
+    let user = {'name': data.name};
+    if (this.members[data.room]?.length > 0) {
+      let list = this.members[data.room];
+      list.push(user);
+      this.members[data.room] = list;
+    } else {
+      let list = [];
+      // @ts-ignore
+      list.push(user);
+      this.members[data.room] = list;
+    }
+    this.sendMembers(data);
+  }
+
+  public removeMember(data: { room: string; name: string; }) {
+    if (this.members[data.room]?.length > 0) {
+      for( var i = 0; i < this.members[data.room].length; i++) {
+        if ( this.members[data.room][i].name == data.name) {
+          this.members[data.room].splice(i, 1);
+        }
+      }
+    }
+    this.sendMembers(data);
+  }
+
+  public sendMembers(data: { room: string; name: string; }) {
+    this.io.to(`room-${data.room}`).emit("refresh-list-members", {"list": this.members[data.room]});
+  }
+
+  public exit(data: { room: string; name: string; socketId: string; }) {
+    this.io.to(`room-${data.room}`).emit("user-exited", {"name": data.name});
+    this.io.in(data.socketId).socketsLeave(data.room);
+  }
+
+  public sendMessage(data: { room: any; name: string; msg: string; }) {
+    this.io.to(`room-${data.room}`).emit("new-msg-receive", data);
   }
 }
 

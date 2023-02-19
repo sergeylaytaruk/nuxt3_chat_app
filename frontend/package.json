@@ -16,6 +16,7 @@
     "@types/bootstrap": "^5.2.6",
     "bootstrap": "^5.2.3",
     "mlly": "^1.1.0",
+    "moment": "^2.29.4",
     "nuxt-typed-router": "^2.2.1",
     "pinia": "^2.0.29",
     "socket.io-client": "^4.5.4",
