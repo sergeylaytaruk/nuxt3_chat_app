@@ -4,8 +4,8 @@ This is the source code for a very simple chat example with rooms used for the G
 backend - adonisjs 5
 frontend - nuxt 3
 
-run backend
+run backend<br />
 node ace serve --watch
 
-run frontend
+run frontend<br />
 npm run dev
