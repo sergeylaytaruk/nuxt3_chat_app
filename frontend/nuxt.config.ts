@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { resolve } from 'path';
 import { createCommonJS } from 'mlly';
+//import routes from '~/router/routers';
 const { __dirname } = createCommonJS(import.meta.url);
 
 export default defineNuxtConfig({
@@ -23,6 +24,7 @@ export default defineNuxtConfig({
     },*/
     hooks: {
         'pages:extend' (pages) {
+            //console.log("routes=", routes);
             pages.push({
                 name: 'login-index',
                 path: '/',

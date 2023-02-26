@@ -13,11 +13,7 @@ function enter() {
     room: this.formData.roomName,
   };
   userStore.setUser(user);
-  console.log("userStore=", userStore.user.name, userStore.userLogin);
   navigateTo('/chat');
-}
-async function goToChat() {
-  //await navigateTo('/chat');
 }
 </script>
 
@@ -44,12 +40,6 @@ async function goToChat() {
                      v-model="formData.roomName"
               >
             </div>
-
-            <!--            <div class="form-group">-->
-            <!--              <label class="form-label">Username</label>-->
-            <!--              <input v-model="username" placeholder="Username" />-->
-            <!--            </div>-->
-
             <!-- /FORM -->
           </div>
         </div>
@@ -62,9 +52,7 @@ async function goToChat() {
         <div class="form-group my-3">
           <button @click="enter()" class="btn btn-success" >Sign in</button>
         </div>
-        <div class="form-group">
-          <NuxtLink to="/chat">chat page</NuxtLink>
-        </div>
+<!--        <div class="form-group"><NuxtLink to="/chat">chat page</NuxtLink></div>-->
       </div>
     </div>
 
