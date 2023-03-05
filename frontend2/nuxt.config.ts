@@ -2,7 +2,10 @@ import { quasar } from '@quasar/vite-plugin'
 import {resolve} from "path";
 
 export default defineNuxtConfig({
-  modules: [],
+  buildModules: ['@pinia/nuxt'],
+  modules: [
+    '@pinia/nuxt',
+  ],
   nitro: {
     // experimental: {
     // Use nitropack v1 behavior
@@ -10,7 +13,7 @@ export default defineNuxtConfig({
     // },
   },
   build: {
-    transpile: ['quasar', '@happy-dom/global-registrator'],
+    transpile: ['quasar', '@happy-dom/global-registrator', '@pinia/nuxt'],
   },
   css: [
     '@quasar/extras/roboto-font/roboto-font.css',

@@ -1,33 +1,35 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-const $q = useQuasar();
+import { useUserStore } from "~/stores/user";
+const userStore = useUserStore();
+userStore.clearUser();
+const formData = ref({
+  userLogin: '',
+  roomName: '',
+});
+
 
 let title = ref('Авторизація');
-let username = ref('');
-let room = ref('');
-let register = ref(false);
 let btnLabel = ref('Вхід');
-let visibility = ref(false);
 
 function required (val) {
-  return  (val && val.length > 0 || 'Поле повинно бути заповнено')
+  return  (val.trim().length > 0 || 'The field must be filled.');
 }
 function short(val) {
-  return  (val && val.length > 3 || 'Значення дуже коротке')
+  return  (val.trim().length > 3 || 'The value is very short. More than 3 characters are required.');
 }
-function submit () {
-    /*username.value.validate();
-    room.value.validate();
 
-    if (!username.value.hasError && (!room.value.hasError)) {
-      $q.notify({
-        icon: 'done',
-        color: 'positive',
-        message: 'Авторизація'
-      })
-    }*/
+function submit() {
+  const user = {
+    name: formData.value.userLogin,
+    room: formData.value.roomName,
+  };
+  userStore.setUser(user);
   navigateTo('/chat');
 }
+
+onMounted(() => {
+});
 </script>
 
 <template>
@@ -49,30 +51,36 @@ function submit () {
           <q-form>
 <!-- FORM -->
             <q-input
-                ref="username"
-                square
+                tabindex="0"
                 clearable
+                square
                 lazy-rules
                 :rules="[required, short]"
-                type="username"
-                label="Логін"
-                model-value="username">
+                label="Login"
+                v-model="formData.userLogin"
+            >
               <template v-slot:prepend>
                 <q-icon name="person" />
+              </template>
+              <template v-if="text" v-slot:append tabindex="-1">
+                <q-icon name="cancel" @click.stop.prevent="text = null" class="cursor-pointer" tabindex="-1" />
               </template>
             </q-input>
 
             <q-input
-                ref="room"
-                square
+                tabindex="1"
                 clearable
-                type="room"
+                square
                 lazy-rules
                 :rules="[required, short]"
-                label="Кімната"
-                model-value="room">
+                label="Room"
+                v-model="formData.roomName"
+            >
               <template v-slot:prepend>
                 <q-icon name="house" />
+              </template>
+              <template v-if="text" v-slot:append tabindex="-1">
+                <q-icon name="cancel" @click.stop.prevent="text = null" class="cursor-pointer" />
               </template>
             </q-input>
 
@@ -87,7 +95,7 @@ function submit () {
               @click="submit"
               class="full-width"
               :label="btnLabel" />
-          <!--  text-white -->
+<!--          <NuxtLink to="/chat">chat page</NuxtLink>-->
         </q-card-actions>
       </q-card>
     </div>

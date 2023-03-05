@@ -11,6 +11,7 @@ function sendMsg() {
   let data = {
     msg: chatMsg
   };
+console.log("data=", data);
   WsClient.sendMessage(data);
   chatMsg = "";
 }

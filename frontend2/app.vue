@@ -1,6 +1,9 @@
 <script lang="ts" setup>
-const $q = useQuasar()
-const route = useRoute()
+import WsClient from "../frontend/socket/socketClient";
+import { Notify } from 'quasar';
+
+const $q = useQuasar();
+const route = useRoute();
 
 const darkActive = computed(() => {
   if (route.query.dark === '1' || $q.dark.isActive) {
@@ -18,6 +21,10 @@ else {
 }
 
 useHead({ bodyAttrs: { class: darkActive } })
+
+
+onMounted(() => {
+});
 </script>
 
 <template>

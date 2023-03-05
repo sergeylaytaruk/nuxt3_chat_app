@@ -1,48 +1,62 @@
-<template>
-  <q-layout>
-    <q-page-container>
-      <q-page
-          class="row"
-          style="background: linear-gradient(#ffffff, #dedeff);"
-      >
-        <!-- page content -->
-        <div class="column q-pa-lg">
-          <div class="row">
+<script setup>
+import { useQuasar } from 'quasar';
+import WsClient from '~/socket/socketClient';
+import Header from "~/components/Chat/Header.vue";
+import ChatHistory from "~/components/Chat/ChatHistory.vue";
+import MessageInput from "~/components/Chat/MessageInput.vue";
+import MembersList from "~/components/Chat/MembersList.vue";
+definePageMeta({
+  middleware: 'auth',
+});
+const $q = useQuasar();
+const style = computed(() => ({
+  height: $q.screen.height + 'px'
+}));
 
-            <div class="q-pa-md row justify-center">
-              <div style="width: 100%; max-width: 400px">
-                <q-chat-message
-                    name="me"
-                    :text="['hey, how are you?']"
-                    stamp="7 minutes ago"
-                    sent
-                    bg-color="yellow-5"
-                />
-                <q-chat-message
-                    name="Jane"
-                    :text="['doing fine, how r you?',
-                    'I just feel like typing a really, really, REALLY long message to annoy you...'
-                    ]"
-                    size="6"
-                    stamp="4 minutes ago"
-                    text-color="white"
-                    bg-color="primary"
-                />
-              </div>
-            </div>
+onMounted(() => {
+  WsClient.boot();
+});
 
-          </div>
-        </div>
-        <!-- /page content -->
-      </q-page>
-    </q-page-container>
-  </q-layout>
-</template>
-
-<script setup lang="ts">
-
+function userExited() {
+  WsClient.exit();
+}
 </script>
 
-<style scoped>
+<template>
+  <div class="WAL position-relative bg-grey-4" :style="style">
+    <q-layout view="lHh Lpr lFf" class="WAL__layout shadow-3" container>
+    <Header />
+    <MembersList />
+    <ChatHistory />
+    <MessageInput />
+    </q-layout>
+  </div>
+</template>
 
+<style lang="sass">
+.WAL
+  width: 100%
+  height: 100%
+  padding-top: 0px
+  padding-bottom: 0px
+  &:before
+    content: ''
+    height: 127px
+    position: fixed
+    top: 0
+    width: 100%
+  &__layout
+    margin: 0 auto
+    z-index: 4000
+    height: 100%
+    width: 90%
+    max-width: 950px
+    border-radius: 5px
+  &__field.q-field--outlined .q-field__control:before
+    border: none
+  .q-drawer--standard
+    .WAL__drawer-close
+      display: none
+  .q-message-container > div
+    width: 100%
 </style>

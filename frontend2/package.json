@@ -21,9 +21,15 @@
   },
   "dependencies": {
     "@happy-dom/global-registrator": "^8.9.0",
+    "@pinia/nuxt": "^0.4.7",
     "@quasar/extras": "^1.15.11",
+    "@types/moment": "^2.13.0",
     "@vueuse/core": "^9.13.0",
-    "quasar": "^2.11.6"
+    "@web-types/quasar-framework": "0.17.19-3",
+    "moment": "^2.29.4",
+    "pinia": "^2.0.32",
+    "quasar": "^2.11.6",
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.35.3",
